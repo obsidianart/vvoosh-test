@@ -11,3 +11,8 @@
 ## Requirements
 - [https://nodejs.org/en/](Node installed) (tested on version 6.9.2, current stable, expected to work on version >=4.5)
 - tested on Chrome/Firefox/ (No expect bug in other browsers)
+
+## Develop
+- ```npm install``` Install dependencies
+- ```npm run``` To start the webserver with hot reloader
+- ```npm build``` To build the distribuition

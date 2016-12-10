@@ -14,5 +14,5 @@
 
 ## Develop
 - ```npm install``` Install dependencies
-- ```npm run``` To start the webserver with hot reloader
-- ```npm build``` To build the distribuition
+- ```npm run start``` To start the webserver with hot reloader
+- ```npm run build``` To build the distribuition (deploy public folder)

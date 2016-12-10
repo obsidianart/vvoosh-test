@@ -1,0 +1,227 @@
+<html>
+	<head>
+		<title>Vvoosh</title>
+		<style type="text/css">
+			#question1 div {
+			    width: 30px;
+			    height: 30px;
+			    margin-right: 5px;
+			    margin-bottom: 1px;
+			    background-color: black;
+			}
+
+			#question2 {
+			    clear: left;
+			}
+
+			#parentDiv a {
+			    background-color: #ccc;   
+			}
+		</style>
+	</head>
+	<body>
+		<div id="question1">
+		    <h3>Question 1</h3>
+		    <div>&nbsp;</div>
+		    <div>&nbsp;</div>
+		    <div>&nbsp;</div>
+		    <div>&nbsp;</div>
+		</div>
+
+		<div id="question2">
+		    <h3>Question 2</h3>
+		    
+		    <a href="" class="findMe">Find me</a>
+		    
+		    <div id="parentDiv">	
+		        <a href="" class="findMe">Find me</a>
+		        <a href="" class="findMe">Find me</a>	
+		    </div>
+		</div>
+		<script>
+			(function(){
+				/*
+				Question 1 (html provided)
+				----------------------------------------------------------------
+				Without using 3rd party libraries write a function called 
+				changeColor that takes an array of elements and iterates through 
+				them changing the background colour
+				----------------------------------------------------------------
+				*/
+				function changeColor(domElements) {
+					if (!domElements || !domElements.length) {
+						return;
+					}
+
+					//Works in every browser (with the exception of let)
+					for (let i=0; i<domElements.length; i++) {
+						domElements[i].style.background = 'orange';
+					}
+
+					//Using Array.from, not working in IE (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/from)
+					//Arrow function: not IE http://caniuse.com/#search=arrow
+					// Array.from(domElements).forEach(el=>{
+					// 	el.style.background = 'navy';
+					// })
+
+					//Using the new of constructor, not working in IE (https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Statements/for...of)
+					// for (el of domElements) { 
+					// 	el.style.background = 'yellow';
+					// }
+				}
+
+				changeColor(document.getElementById('question1').getElementsByTagName('div'));
+			
+
+
+
+				/**
+				Question 2 (html provided)
+				----------------------------------------------------------------
+				Using jQuery or another lib (or if you are feeling brave dont 
+				use anything) can you get the elements with the class 'findMe' 
+				that are within the element 'parentDiv' and do the following: 
+
+				1. Give each element the class 'found'
+				2. Add a click event to each element that when clicked just 
+				logs the message 'found' to the console
+				----------------------------------------------------------------
+				*/
+
+				//See question 1 for compatibility
+				function findMe(){
+					var findMeElements = document.querySelectorAll('#parentDiv .findMe');
+
+					Array.from(findMeElements).forEach(el=>{
+						//AddClass: IE 10 for the use we are interested https://developer.mozilla.org/en/docs/Web/API/Element/classList
+						el.classList.add('found');
+
+						//Event delegation would be appropriate if the number of element is unknown
+						el.onclick = function(evt) {
+							evt.preventDefault(); //This isn't stricly necessary for the exercise but I assume is expected
+							console.log('found');
+						};
+					})
+				}
+
+				findMe()
+
+
+
+
+				/**
+				Question 3
+				----------------------------------------------------------------
+				Complete the below object so that it has the following:
+
+				1. A private variable called 'privateVar' with the value 'I am private'
+				2. A public variable called 'publicVar' with the value 'I am public'
+				3. A private function called 'privateFnc' that when called outputs 'I am a private fnc'
+				4. A public function called 'publicFnc' that when called outputs 'I am a public fnc'
+				----------------------------------------------------------------
+				*/
+
+				//Using revealing pattern to simulate public/private behaviours
+				//Class constructor (ES6) has public/private declaration
+				var myObj = (function () {
+					var privateVar = 'I am private';
+					var publicVar = 'I am public';
+					function privateFnc(){
+						console.log('I am a private fnc');
+					}
+					function publicFnc(){
+						console.log('I am a public fnc');
+					} 
+
+					//single side object properties declaration is part of the ES6 spec
+					return {
+						publicVar, 
+						publicFnc
+					}
+				}());
+
+				console.log(myObj.privateVar); // outputs undefined
+				console.log(myObj.publicVar); // outputs I am public
+				console.log(myObj.privateFnc); // outputs undefined
+				console.log(myObj.publicFnc); // ouputs fnc()
+
+			})()
+
+
+			/**
+			Question 4
+			----------------------------------------------------------------
+			Without using 3rd party libraries implement the duplicate method 
+			so the below statement works
+			----------------------------------------------------------------
+			*/
+
+			//For duplication ES5 or ES6 are quite equal as they both create a new copy
+			//I would normally advice against augmenting native objects
+			Array.prototype.duplicate = function(){
+				//return this.concat(this) //ES5
+				return [...this, ...this] //ES6
+			}
+			console.log([1, 2, 3, 4].duplicate()); // outputs [1, 2, 3, 4, 1, 2, 3, 4] 
+
+
+
+			/**
+			Question 5
+			----------------------------------------------------------------
+			Without using 3rd party libraries complete the extend function so
+			you can extend a given object with the properties from 1 or more 
+			other objects
+			----------------------------------------------------------------
+			*/
+
+			//ES6 only solution
+			// var extend = function(objToExtend, ...rest) {
+			//     return Object.assign(objToExtend, ...rest) 
+			// }
+
+			// //ES6 only solution (without changing the call signature)
+			var extend = function(objToExtend) {
+			    return Object.assign(...arguments) 
+			}
+
+			// //ES5
+			// var extend = function(objToExtend) {
+			// 	var i, objToMerge, prop;
+
+			// 	for (i = 1; i<arguments.length; i++) {
+			// 		objToMerge = arguments[i];
+			// 		for (prop in objToMerge){
+			// 			//Avoid copying prototype (unless it is expected)
+			// 			if (Object.prototype.hasOwnProperty.call(objToMerge, prop)) {
+			// 	            objToExtend[prop] = objToMerge[prop];
+			// 	        }
+			// 		}
+			// 	}
+
+			// 	return objToExtend
+			// }
+
+			var firstObject = {
+			    firstMethod: function() {
+			        return 'First Object';    
+			    },
+			    randomNonsense: {
+			        what: 'when'
+			    }
+			};
+
+			var secondObject = {
+			    secondMethod: function() {
+			        return 'Second Object';    
+			    }
+			};
+
+			var thirdObject = extend({}, firstObject, secondObject);
+
+			console.log(thirdObject.firstMethod());
+			console.log(thirdObject.secondMethod());
+			console.log(thirdObject.randomNonsense.what);
+		</script>
+	</body>
+</html>

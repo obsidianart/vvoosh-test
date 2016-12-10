@@ -40,19 +40,21 @@ export default class App extends React.Component {
     return (
       <div>
         <h4>
-          Company:
-          <select value={this.state.companySelected} onChange={this.handleSetCompany.bind(this)}>
-            {
-              this.getCompanies().map(company=>(
-                <option
-                  key={company}
-                  value={company}
-                  >
-                    {company}
-                  </option>
-              ))
-            }
-          </select>
+          <label>
+            Company:
+            <select value={this.state.companySelected} onChange={this.handleSetCompany.bind(this)}>
+              {
+                this.getCompanies().map(company=>(
+                  <option
+                    key={company}
+                    value={company}
+                    >
+                      {company}
+                    </option>
+                ))
+              }
+            </select>
+          </label>
         </h4>
         <hr />
         {
